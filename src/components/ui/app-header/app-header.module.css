@@ -35,3 +35,20 @@
   align-items: center;
   margin: 0 auto;
 }
+
+.menu_link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  align-items: center;
+}
+.menu_link:visited {
+  color: inherit;
+}
+.menu_link:active {
+  color: inherit;
+}
+.menu_link:hover {
+  text-decoration: none;
+  color: #f2f2f3;
+}
