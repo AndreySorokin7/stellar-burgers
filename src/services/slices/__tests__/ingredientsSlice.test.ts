@@ -4,10 +4,17 @@ import reducer, {
 } from '../ingredientsSlice';
 import { TIngredient } from '../../../utils/types';
 
+// Константы для часто используемых значений и селекторов в тестах
+const EMPTY_ARRAY: TIngredient[] = [];
+const ACTION_TYPE_EMPTY = '';
+const LOADING_TRUE = true;
+const LOADING_FALSE = false;
+const ERROR_NULL = null;
+
 const initialState: IngredientsState = {
-  items: [],
-  loading: false,
-  error: null
+  items: EMPTY_ARRAY,
+  loading: LOADING_FALSE,
+  error: ERROR_NULL
 };
 
 const mockIngredients: TIngredient[] = [
@@ -41,15 +48,15 @@ const mockIngredients: TIngredient[] = [
 
 describe('ingredientsSlice reducer', () => {
   it('должен вернуть начальное состояние', () => {
-    expect(reducer(undefined, { type: '' })).toEqual(initialState);
+    expect(reducer(undefined, { type: ACTION_TYPE_EMPTY })).toEqual(initialState);
   });
 
   describe('fetchIngredients', () => {
     it('должен установить loading=true при pending', () => {
       const action = { type: fetchIngredients.pending.type };
       const state = reducer(initialState, action);
-      expect(state.loading).toBe(true);
-      expect(state.error).toBeNull();
+      expect(state.loading).toBe(LOADING_TRUE);
+      expect(state.error).toBe(ERROR_NULL);
     });
 
     it('должен загрузить ингредиенты при fulfilled', () => {
@@ -58,9 +65,9 @@ describe('ingredientsSlice reducer', () => {
         payload: mockIngredients
       };
       const state = reducer(initialState, action);
-      expect(state.loading).toBe(false);
+      expect(state.loading).toBe(LOADING_FALSE);
       expect(state.items).toEqual(mockIngredients);
-      expect(state.error).toBeNull();
+      expect(state.error).toBe(ERROR_NULL);
     });
 
     it('должен установить error при rejected', () => {
@@ -70,8 +77,8 @@ describe('ingredientsSlice reducer', () => {
         payload: errorMessage
       };
       const state = reducer(initialState, action);
-      expect(state.loading).toBe(false);
-      expect(state.items).toEqual([]);
+      expect(state.loading).toBe(LOADING_FALSE);
+      expect(state.items).toEqual(EMPTY_ARRAY);
       expect(state.error).toBe(errorMessage);
     });
   });

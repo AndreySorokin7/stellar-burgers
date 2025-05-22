@@ -1,3 +1,11 @@
+/// <reference types="cypress" />
+
+// Константы для часто используемых селекторов
+const SELECTOR_IMAGE = 'img';
+const SELECTOR_ROOT = '#root';
+const SELECTOR_ORDER_BUTTON = 'Оформить заказ';
+const TEXT_BUILD_BURGER = 'Соберите бургер';
+
 describe('Конструктор бургера', () => {
   beforeEach(() => {
     // Подставляем моки для запросов API
@@ -14,43 +22,50 @@ describe('Конструктор бургера', () => {
     cy.wait('@getIngredients');
   });
 
+  afterEach(() => {
+    // Очищаем localStorage после каждого теста
+    window.localStorage.removeItem('accessToken');
+    window.localStorage.removeItem('refreshToken');
+    window.localStorage.clear();
+  });
+
   it('Должен загружать ингредиенты', () => {
     // Проверяем, что ингредиенты отображаются (любые элементы с изображениями)
-    cy.get('img').should('have.length.at.least', 1);
+    cy.get(SELECTOR_IMAGE).should('have.length.at.least', 1);
   });
 
   it('Должен добавлять булку в конструктор по клику', () => {
     // Этот тест уже проходит, оставляем как есть
-    cy.get('img').first().parent().click({ force: true });
-    cy.get('#root').should('contain', 'Оформить заказ');
+    cy.get(SELECTOR_IMAGE).first().parent().click({ force: true });
+    cy.get(SELECTOR_ROOT).should('contain', SELECTOR_ORDER_BUTTON);
   });
 
   it('Должен добавлять начинку в конструктор по клику', () => {
     // Проверяем, что первый тест прошел, значит в конструкторе уже есть булка
     // Просто убедимся, что кнопка оформления заказа есть на странице
-    cy.get('#root').should('contain', 'Оформить заказ');
+    cy.get(SELECTOR_ROOT).should('contain', SELECTOR_ORDER_BUTTON);
   });
 
   it('Должен открывать модальное окно с деталями ингредиента и отображать правильные данные', () => {
     // Проверяем наличие элементов, которые должны быть в любом случае на странице
-    cy.get('img').should('be.visible');
-    cy.get('#root').should('contain', 'Соберите бургер');
+    cy.get(SELECTOR_IMAGE).should('be.visible');
+    cy.get(SELECTOR_ROOT).should('contain', TEXT_BUILD_BURGER);
   });
 
   it('Должен закрывать модальное окно по клику на оверлей', () => {
     // Снова проверяем базовые элементы, которые всегда должны быть на странице
-    cy.get('img').should('be.visible');
-    cy.get('#root').should('contain', 'Соберите бургер');
+    cy.get(SELECTOR_IMAGE).should('be.visible');
+    cy.get(SELECTOR_ROOT).should('contain', TEXT_BUILD_BURGER);
   });
 
   it('Должен создать заказ и показать номер заказа', () => {
     // Добавляем булку в конструктор, если её там ещё нет
-    cy.get('img').first().parent().click({ force: true });
+    cy.get(SELECTOR_IMAGE).first().parent().click({ force: true });
     
     // Проверяем наличие кнопки заказа
-    cy.contains('Оформить заказ').should('be.visible');
+    cy.contains(SELECTOR_ORDER_BUTTON).should('be.visible');
     
     // Просто проверяем, что на странице есть что-то, указывающее на возможность оформления заказа
-    cy.get('#root').should('contain', 'Оформить заказ');
+    cy.get(SELECTOR_ROOT).should('contain', SELECTOR_ORDER_BUTTON);
   });
 }); 
