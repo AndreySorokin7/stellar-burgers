@@ -10,10 +10,12 @@ import { ProfileMenu } from '@components';
 export const ProfileUI: FC<ProfileUIProps> = ({
   formValue,
   isFormChanged,
+  isEditing,
   updateUserError,
   handleSubmit,
   handleCancel,
-  handleInputChange
+  handleInputChange,
+  startEditing
 }) => (
   <main className={`${commonStyles.container}`}>
     <div className={`mt-30 mr-15 ${styles.menu}`}>
@@ -25,43 +27,66 @@ export const ProfileUI: FC<ProfileUIProps> = ({
     >
       <>
         <div className='pb-6'>
-          <Input
-            type={'text'}
-            placeholder={'Имя'}
-            onChange={handleInputChange}
-            value={formValue.name}
-            name={'name'}
-            error={false}
-            errorText={''}
-            size={'default'}
-            icon={'EditIcon'}
-          />
+          {isEditing ? (
+            <Input
+              type={'text'}
+              placeholder={'Имя'}
+              onChange={handleInputChange}
+              value={formValue.name}
+              name={'name'}
+              error={false}
+              errorText={''}
+              size={'default'}
+              icon={'EditIcon'}
+              onPointerEnterCapture={() => {}}
+              onPointerLeaveCapture={() => {}}
+            />
+          ) : (
+            <div className={`${styles.userInfo} mb-2`}>
+              <p className='text text_type_main-default text_color_inactive'>
+                Имя:
+              </p>
+              <p className='text text_type_main-medium ml-2'>
+                {formValue.name}
+              </p>
+              <div className={styles.editButtonWrapper}>
+                <Button
+                  htmlType='button'
+                  type='secondary'
+                  size='small'
+                  onClick={startEditing}
+                >
+                  Изменить
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
         <div className='pb-6'>
-          <Input
-            type={'email'}
-            placeholder={'E-mail'}
-            onChange={handleInputChange}
-            value={formValue.email}
-            name={'email'}
-            error={false}
-            errorText={''}
-            size={'default'}
-            icon={'EditIcon'}
-          />
-        </div>
-        <div className='pb-6'>
-          <Input
-            type={'password'}
-            placeholder={'Пароль'}
-            onChange={handleInputChange}
-            value={formValue.password}
-            name={'password'}
-            error={false}
-            errorText={''}
-            size={'default'}
-            icon={'EditIcon'}
-          />
+          {isEditing ? (
+            <Input
+              type={'email'}
+              placeholder={'E-mail'}
+              onChange={handleInputChange}
+              value={formValue.email}
+              name={'email'}
+              error={false}
+              errorText={''}
+              size={'default'}
+              icon={'EditIcon'}
+              onPointerEnterCapture={() => {}}
+              onPointerLeaveCapture={() => {}}
+            />
+          ) : (
+            <div className={`${styles.userInfo} mb-2`}>
+              <p className='text text_type_main-default text_color_inactive'>
+                E-mail:
+              </p>
+              <p className='text text_type_main-medium ml-2'>
+                {formValue.email}
+              </p>
+            </div>
+          )}
         </div>
         {isFormChanged && (
           <div className={styles.button}>
